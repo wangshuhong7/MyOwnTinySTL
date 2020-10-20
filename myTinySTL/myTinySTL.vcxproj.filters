@@ -18,7 +18,7 @@
     <ClInclude Include="alloc.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="construct.h">
+    <ClInclude Include="TypeTraits.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

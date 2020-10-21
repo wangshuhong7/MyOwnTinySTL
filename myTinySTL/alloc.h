@@ -44,6 +44,8 @@ namespace myTinySTL {
 		static char *chunk_alloc(size_t size, size_t &nobjs);
 	public:
 		//外部可以调用的部分
+		//定义一个函数指针allocate，返回值为void类型，并且有一个size_t参数的函数
+		//函数指针是一种特殊的指针，它指向函数的入口
 		static void *allocate(size_t bytes);
 		static void deallocate(void *ptr, size_t bytes);
 		static void *reallocate(void *ptr, size_t old_sz, size_t new_sz);
@@ -63,12 +65,12 @@ namespace myTinySTL {
 		size_t index = FREELIST_INDEX(bytes);
 		obj *list = free_list[index];
 		if (list) {
-			//次list还有空间
+			//此list还有空间
 			free_list[index] = list->next;
 			return list;
 		}
 		else {
-			//次list没有足够空间，要从内存池取空间
+			//此list没有足够空间，要从内存池取空间
 			return refill(ROUND_UP(bytes));
 		}
 	}

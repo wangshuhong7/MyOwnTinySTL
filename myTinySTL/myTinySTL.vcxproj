@@ -126,6 +126,7 @@
     <ClInclude Include="alloc.h" />
     <ClInclude Include="allocator.h" />
     <ClInclude Include="construct.h" />
+    <ClInclude Include="iterator.h" />
     <ClInclude Include="TypeTraits.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

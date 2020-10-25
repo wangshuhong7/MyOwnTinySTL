@@ -139,13 +139,13 @@ namespace myTinySTL {
 	// 选择函数：接受一个 pair，返回第二个元素
 	template <class Pair>
 	struct selectsecond :public unarg_function<Pair, typename Pair::second_type> {
-		const typename Pair::second_type& operator() (coonst Pair& y) const { return x.second; }
+		const typename Pair::second_type& operator() (const Pair& x) const { return x.second; }
 	};
 
 	//投射参数，返回第一参数
 	template <class arg1, class arg2>
 	struct projectfirst :public binary_function<arg1, arg2, arg1> {
-		agr1 operator()(const arg1& x, const arg2& y) const { return x; }
+		arg1 operator()(const arg1& x, const arg2& y) const { return x; }
 	};
 
 	//投射参数，返回第二参数

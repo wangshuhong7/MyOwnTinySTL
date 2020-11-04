@@ -128,6 +128,7 @@
     <ClInclude Include="construct.h" />
     <ClInclude Include="functional.h" />
     <ClInclude Include="iterator.h" />
+    <ClInclude Include="reverseIterator.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="utility.h" />
   </ItemGroup>

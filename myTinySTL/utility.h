@@ -1,7 +1,7 @@
 #pragma once
 #ifndef _UTILITY_H_
 #define _UTILITY_H_
-namespace MyTinySTL {
+namespace myTinySTL {
 	//交换模板的类
 	template<class T>
 	void swap(T& a, T& b) {

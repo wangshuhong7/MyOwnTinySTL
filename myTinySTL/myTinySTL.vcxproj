@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="algorithm.h" />
     <ClInclude Include="alloc.h" />
     <ClInclude Include="allocator.h" />
     <ClInclude Include="construct.h" />

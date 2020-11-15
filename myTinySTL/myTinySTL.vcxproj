@@ -131,6 +131,7 @@
     <ClInclude Include="iterator.h" />
     <ClInclude Include="reverseIterator.h" />
     <ClInclude Include="TypeTraits.h" />
+    <ClInclude Include="uninitialized.h" />
     <ClInclude Include="utility.h" />
   </ItemGroup>
   <ItemGroup>

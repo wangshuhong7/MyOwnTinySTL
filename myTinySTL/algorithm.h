@@ -159,7 +159,7 @@ namespace myTinySTL {
 	template<class RandomAccessIterator,class Compare>
 	void sort_heap(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
 		for (auto cur = last; cur != first; --cur) {
-			myTinySTL::pop_heap(first, cur, cmop);
+			myTinySTL::pop_heap(first, cur, comp);
 		}
 	}
 

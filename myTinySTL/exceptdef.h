@@ -21,6 +21,6 @@ namespace myTinySTL
 #define THROW_RUNTIME_ERROR_IF(expr, what) \
   if ((expr)) throw std::runtime_error(what)
 
-} // namepsace mystl
+} // namepsace myTinySTL
 
 #endif // !MYTINYSTL_EXCEPTDEF_H_

@@ -1,11 +1,12 @@
 #include<iostream>
 #include"functional.h"
-
-using namespace std;
+#include"vector.h"
+using namespace myTinySTL;
 
 int main() {
-	struct plus<int>a;
+	vector<int>t;
+	int x = 1;
+	t.push_back(x);
 	
-	cout << a(3, 5) << endl;
 	return 0;
 }

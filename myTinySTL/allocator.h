@@ -73,5 +73,27 @@ namespace myTinySTL {
 			first->~T();//逐一调用析构函数
 		}
 	}
+
+	template<class T,class alloc>
+	class simple_alloc {
+	public:
+		static T *allocate(size_t n) {
+			return 0 == n ?0: (T*)alloc::allocate(n * sizeof(T));
+		}
+
+		static T *allocate(void) {
+			return (T*)alloc::allocate(sizeof(T));
+		}
+
+		static void deallocate(T *p, size_t n) {
+			if (0 != n) {
+				alloc::deallocate(p, n * sizeof(T));
+			}
+		}
+
+		static void deallocate(T *p) {
+			alloc::deallocate(p, sizeof(T));
+		}
+	};
 }
 #endif // !_ALLOCATOR_H_

@@ -21,6 +21,19 @@ namespace myTinySTL {
 		return _uninitialized_copy_aux(first, last, result, isPODType());
 	}
 
+	template<class InputIterator, class ForwardIterator>
+	ForwardIterator uninitialized_copy(ForwardIterator first, ForwardIterator last, ForwardIterator result) {
+		typedef typename _type_traits<iterator_traits<ForwardIterator>::value_type>::is_POD_type isPODType;
+		return _uninitialized_copy_aux(first, last, result, isPODType());
+	}
+
+	template<class InputIterator, class ForwardIterator>
+	ForwardIterator _uninitialized_copy_aux(ForwardIterator first, ForwardIterator last,
+		ForwardIterator result, _true_type) {
+		memcpy(result, first, (last - first) * sizeof(*first));
+		return result + (last - first);
+	}
+
 	template<class InputIterator,class ForwardIterator>
 	ForwardIterator _uninitialized_copy_aux(InputIterator first, InputIterator last,
 		ForwardIterator result, _true_type) {
@@ -30,6 +43,15 @@ namespace myTinySTL {
 
 	template<class InputIterator ,class ForwardIterator>
 	ForwardIterator _uninitialized_copy_aux(InputIterator first, InputIterator last,
+		ForwardIterator result, _false_type) {
+		ForwardIterator cur = result;
+		for (; first != last; ++first, ++cur) {
+			construct(&*cur, *first);
+		}
+		return cur;
+	}
+	template<class InputIterator, class ForwardIterator>
+	ForwardIterator _uninitialized_copy_aux(ForwardIterator first, ForwardIterator last,
 		ForwardIterator result, _false_type) {
 		ForwardIterator cur = result;
 		for (; first != last; ++first, ++cur) {
@@ -81,9 +103,8 @@ namespace myTinySTL {
 	}
 
 	template<class ForwardIterator,class Size,class T>
-	ForwardIterator _uninitialized_fill_n_aux(ForwardIterator first, Size n,
-		const T& value, _true_type) {
-		return fill_n(first, n, x);
+	ForwardIterator _uninitialized_fill_n_aux(ForwardIterator first, Size n,const T& value, _true_type) {
+		return fill_n(first, n, value);
 	}
 
 	template<class ForwardIterator,class Size,class T>

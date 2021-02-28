@@ -5,7 +5,7 @@
 #include"TypeTraits.h"
 namespace myTinySTL {
 	template<class T1,class T2>
-	inline void construct(T1* P, const T2& value) {
+	inline void construct(T1* p, const T2& value) {
 		new(p)T1(value);//用new来给对应地址分配空间
 	}
 
@@ -40,11 +40,11 @@ namespace myTinySTL {
 	template<class ForwardIterator>
 	inline void __destroy_aux(ForwardIterator first, ForwardIterator lase, _true_type) {}
 
-	template<class ForwardIterator>
+	/*template<class ForwardIterator>
 	inline void destroy(ForwardIterator first, ForwardIterator last) {
 		typedef typename _type_traits<T>::is_POD_type is_POD_type;
 		_destroy(first, last, is_POD_type);
-	}
+	}*/
 	
 }
 #endif // !_CONSTRUCT_H_

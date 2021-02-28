@@ -28,7 +28,7 @@ namespace myTinySTL {
 		void swap(pair& pr);
 	public:
 		template<class T1,class T2>
-		friend bool operator==(const pair<T1£¬T2>&lhs, const pair<T1, T2>& rhs);
+		friend bool operator==(const pair<T1,T2>&lhs, const pair<T1, T2>& rhs);
 		template<class T1,class T2>
 		friend bool operator!=(const pair<T1, T2>&lhs, const pair<T1, T2>& rhs);
 		template<class T1,class T2>

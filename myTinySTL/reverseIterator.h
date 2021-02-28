@@ -24,7 +24,7 @@ namespace myTinySTL {
 		//explicit阻止隐式的类型转换，此函数只能被显示调用
 		explicit reverse_iterator_t(const iterator_type& it) :base(it) {
 			auto temp = it;
-			cur = --temp;//由于是逆向遍历，所以地址向前移动
+			cur_ = --temp;//由于是逆向遍历，所以地址向前移动
 		}
 		//默认构造函数
 		template<class Iter>
@@ -37,7 +37,7 @@ namespace myTinySTL {
 		reference operator*() { return(*cur_); }//返回当前指针
 		const_reference operator*() const { return (*cur_); }//对常迭代器返回当前指针
 		pointer operator->() { return &(operator*()); }//返回当前指针的引用
-		const_pointer operator->() { return &(operator*()); }//返回当前指针的常引用
+		const_pointer operator->() const{ return &(operator*()); }//返回当前指针的常引用
 		reverse_iterator_t& operator++() {
 			--base_;
 			--cur_;//由于是反向迭代器，所以向前反而是--

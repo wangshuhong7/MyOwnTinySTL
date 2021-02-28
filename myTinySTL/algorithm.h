@@ -109,8 +109,8 @@ namespace myTinySTL {
 	//建堆
 	template<class RandomAccessIterator>
 	void make_heap(RandomAccessIterator first, RandomAccessIterator last) {
-		myTinySTL::make_heap(first,last,
-			typename myTinySTL::less<myTinySTL::iterator_traits<RandomAccessIterator>::value_type>())
+		myTinySTL::make_heap(first, last,
+			typename myTinySTL::less<myTinySTL::iterator_traits<RandomAccessIterator>::value_type>());
 	}//没有比较函数则默认调用less
 	//有比较函数的建堆
 	template<class RandomAccessIterator, class Compare>
@@ -320,8 +320,15 @@ namespace myTinySTL {
 	template<class ForwardIterator>
 	//找出第一组满足条件的相邻元素的位置
 	ForwardIterator adjacent_find(ForwardIterator first, ForwardIterator last) {
-		return myTinySTL::adjacent_find(first, last,
-			equal_to<iterator_traits<typename ForwardIterator>::value_type>());
+		if (first == last)	return last;
+		ForwardIterator next = first;
+		while (++next != last) {
+			if (*first == *next) {
+				return first;
+			}
+			first = next;
+		}
+		return last;
 	}
 
 	template<class ForwardIterator,class BinaryPredicate>

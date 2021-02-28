@@ -131,10 +131,14 @@
     <ClInclude Include="exceptdef.h" />
     <ClInclude Include="functional.h" />
     <ClInclude Include="iterator.h" />
+    <ClInclude Include="list.h" />
     <ClInclude Include="reverseIterator.h" />
+    <ClInclude Include="stack.h" />
     <ClInclude Include="TypeTraits.h" />
     <ClInclude Include="uninitialized.h" />
+    <ClInclude Include="unionFindSet.h" />
     <ClInclude Include="utility.h" />
+    <ClInclude Include="vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="testmain.cpp" />

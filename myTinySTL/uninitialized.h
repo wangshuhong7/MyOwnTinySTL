@@ -1,120 +1,256 @@
-#pragma once
-#ifndef _UNINITIALIZED_FUNCTIONS_H_
-#define _UNINITIALIZED_FUNCTIONS_H_
-#include"algorithm.h"
-#include"construct.h"
-#include"iterator.h"
-#include"TypeTraits.h"
+#ifndef MYTINYSTL_UNINITIALIZED_H_
+#define MYTINYSTL_UNINITIALIZED_H_
 
-namespace myTinySTL {
-	/*template<class InputIterator,class ForwardIterator>
-	ForwardIterator _uninitialized_copy_aux(InputIterator first, InputIterator last,
-		ForwardIterator result, _true_type);
-	template<class InputIterator,class ForwardIterator>
-	ForwardIterator _uninitialized_copy_aux(InputIterator first, InputIterator last,
-		ForwardIterator result, _false_type);*/
+// 这个头文件用于对未初始化空间构造元素
 
-	//是否是POD类型采取方式不同
-	template<class InputIterator,class ForwardIterator>
-	ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, InputIterator result) {
-		typedef typename _type_traits<iterator_traits<InputIterator>::value_type>::is_POD_type isPODType;
-		return _uninitialized_copy_aux(first, last, result, isPODType());
+#include "algobase.h"
+#include "construct.h"
+#include "iterator.h"
+#include "type_traits.h"
+#include "util.h"
+
+namespace myTinySTL
+{
+
+	/*****************************************************************************************/
+	// uninitialized_copy
+	// 把 [first, last) 上的内容复制到以 result 为起始处的空间，返回复制结束的位置
+	/*****************************************************************************************/
+	template <class InputIter, class ForwardIter>
+	ForwardIter
+		unchecked_uninit_copy(InputIter first, InputIter last, ForwardIter result, std::true_type)
+	{
+		return myTinySTL::copy(first, last, result);
 	}
 
-	template<class InputIterator, class ForwardIterator>
-	ForwardIterator uninitialized_copy(ForwardIterator first, ForwardIterator last, ForwardIterator result) {
-		typedef typename _type_traits<iterator_traits<ForwardIterator>::value_type>::is_POD_type isPODType;
-		return _uninitialized_copy_aux(first, last, result, isPODType());
-	}
-
-	template<class InputIterator, class ForwardIterator>
-	ForwardIterator _uninitialized_copy_aux(ForwardIterator first, ForwardIterator last,
-		ForwardIterator result, _true_type) {
-		memcpy(result, first, (last - first) * sizeof(*first));
-		return result + (last - first);
-	}
-
-	template<class InputIterator,class ForwardIterator>
-	ForwardIterator _uninitialized_copy_aux(InputIterator first, InputIterator last,
-		ForwardIterator result, _true_type) {
-		memcpy(result, first, (last - first) * sizeof(*first));
-		return result + (last - first);
-	}
-
-	template<class InputIterator ,class ForwardIterator>
-	ForwardIterator _uninitialized_copy_aux(InputIterator first, InputIterator last,
-		ForwardIterator result, _false_type) {
-		ForwardIterator cur = result;
-		for (; first != last; ++first, ++cur) {
-			construct(&*cur, *first);
+	template <class InputIter, class ForwardIter>
+	ForwardIter
+		unchecked_uninit_copy(InputIter first, InputIter last, ForwardIter result, std::false_type)
+	{
+		auto cur = result;
+		try
+		{
+			for (; first != last; ++first, ++cur)
+			{
+				myTinySTL::construct(&*cur, *first);
+			}
 		}
-		return cur;
-	}
-	template<class InputIterator, class ForwardIterator>
-	ForwardIterator _uninitialized_copy_aux(ForwardIterator first, ForwardIterator last,
-		ForwardIterator result, _false_type) {
-		ForwardIterator cur = result;
-		for (; first != last; ++first, ++cur) {
-			construct(&*cur, *first);
+		catch (...)
+		{
+			for (; result != cur; ++result)
+				myTinySTL::destroy(&*result);
 		}
 		return cur;
 	}
 
-	//对空白区域传参填入
-	/*template<class ForwardIterator,class T>
-	void _uninitialized_fill_aux(ForwardIterator first, ForwardIterator last,
-		const T& value, _true_type);
-	template<class ForwardIterator,class T>
-	void _uninitialized_fill_aux(ForwardIterator first, ForwardIterator last,
-		const T& calue, _false_type);*/
-
-	template<class ForwardIterator,class T>
-	void uninitialized_fill(ForwardIterator first, ForwardIterator last, const T& value) {
-		typedef typename _type_traits<T>::is_POD_type isPODType;
-		_uninitialized_fill_aux(first, last, value, isPODType());
+	template <class InputIter, class ForwardIter>
+	ForwardIter uninitialized_copy(InputIter first, InputIter last, ForwardIter result)
+	{
+		return myTinySTL::unchecked_uninit_copy(first, last, result,
+			std::is_trivially_copy_assignable<
+			typename iterator_traits<ForwardIter>::
+			value_type>{});
 	}
 
-	template<class ForwardIterator,class T>
-	void _uninitialized_fill_aux(ForwardIterator first, ForwardIterator last,
-		const T& value, _true_type) {
-		fill(first, last, value);
-	} 
+	/*****************************************************************************************/
+	// uninitialized_copy_n
+	// 把 [first, first + n) 上的内容复制到以 result 为起始处的空间，返回复制结束的位置
+	/*****************************************************************************************/
+	template <class InputIter, class Size, class ForwardIter>
+	ForwardIter
+		unchecked_uninit_copy_n(InputIter first, Size n, ForwardIter result, std::true_type)
+	{
+		return myTinySTL::copy_n(first, n, result).second;
+	}
 
-	template<class ForwardIterator,class T>
-	void _uninitialized_fill_aux(ForwardIterator first, ForwardIterator last,
-		const T& value, _false_type) {
-		for (; first != last; first++) {
-			construct(first, value);
+	template <class InputIter, class Size, class ForwardIter>
+	ForwardIter
+		unchecked_uninit_copy_n(InputIter first, Size n, ForwardIter result, std::false_type)
+	{
+		auto cur = result;
+		try
+		{
+			for (; n > 0; --n, ++cur, ++first)
+			{
+				myTinySTL::construct(&*cur, *first);
+			}
 		}
-	}
-
-	//对局部区域赋值
-	/*template<class ForwardIterator,class Size,class T>
-	ForwardIterator _uninitialized_fill_n_aux(ForwardIterator first, Size n,
-		const T& value, _true_type);
-	template<class ForwardIterator,class Size,class T>
-	ForwardIterator _uninitialized_fill_n_aux(ForwardIterator first,Size n,
-		const T& value, _false_type);*/
-
-	template<class ForwardIterator,class Size,class T>
-	inline ForwardIterator uninitialized_fill_n_aux(ForwardIterator first, Size n, const T& x) {
-		typedef typename _type_traits<T>::is_POD_Type isPODType;
-		return _uninitialized_fill_n_aux(first, n, x, isPODType());
-	}
-
-	template<class ForwardIterator,class Size,class T>
-	ForwardIterator _uninitialized_fill_n_aux(ForwardIterator first, Size n,const T& value, _true_type) {
-		return fill_n(first, n, value);
-	}
-
-	template<class ForwardIterator,class Size,class T>
-	ForwardIterator _uninitialized_fill_n_aux(ForwardIterator first, Size n,
-		const T& value, _false_type) {
-		ForwardIterator cur = first;
-		for (; n > 0; --n, ++cur) {
-			construct(&*cur, value);
+		catch (...)
+		{
+			for (; result != cur; ++result)
+				myTinySTL::destroy(&*result);
 		}
 		return cur;
 	}
-}
-#endif // !_UNINITIALIZED_FUNCTIONS_H_
+
+	template <class InputIter, class Size, class ForwardIter>
+	ForwardIter uninitialized_copy_n(InputIter first, Size n, ForwardIter result)
+	{
+		return myTinySTL::unchecked_uninit_copy_n(first, n, result,
+			std::is_trivially_copy_assignable<
+			typename iterator_traits<InputIter>::
+			value_type>{});
+	}
+
+	/*****************************************************************************************/
+	// uninitialized_fill
+	// 在 [first, last) 区间内填充元素值
+	/*****************************************************************************************/
+	template <class ForwardIter, class T>
+	void
+		unchecked_uninit_fill(ForwardIter first, ForwardIter last, const T& value, std::true_type)
+	{
+		myTinySTL::fill(first, last, value);
+	}
+
+	template <class ForwardIter, class T>
+	void
+		unchecked_uninit_fill(ForwardIter first, ForwardIter last, const T& value, std::false_type)
+	{
+		auto cur = first;
+		try
+		{
+			for (; cur != last; ++cur)
+			{
+				myTinySTL::construct(&*cur, value);
+			}
+		}
+		catch (...)
+		{
+			for (; first != cur; ++first)
+				myTinySTL::destroy(&*first);
+		}
+	}
+
+	template <class ForwardIter, class T>
+	void  uninitialized_fill(ForwardIter first, ForwardIter last, const T& value)
+	{
+		myTinySTL::unchecked_uninit_fill(first, last, value,
+			std::is_trivially_copy_assignable<
+			typename iterator_traits<ForwardIter>::
+			value_type>{});
+	}
+
+	/*****************************************************************************************/
+	// uninitialized_fill_n
+	// 从 first 位置开始，填充 n 个元素值，返回填充结束的位置
+	/*****************************************************************************************/
+	template <class ForwardIter, class Size, class T>
+	ForwardIter
+		unchecked_uninit_fill_n(ForwardIter first, Size n, const T& value, std::true_type)
+	{
+		return myTinySTL::fill_n(first, n, value);
+	}
+
+	template <class ForwardIter, class Size, class T>
+	ForwardIter
+		unchecked_uninit_fill_n(ForwardIter first, Size n, const T& value, std::false_type)
+	{
+		auto cur = first;
+		try
+		{
+			for (; n > 0; --n, ++cur)
+			{
+				myTinySTL::construct(&*cur, value);
+			}
+		}
+		catch (...)
+		{
+			for (; first != cur; ++first)
+				myTinySTL::destroy(&*first);
+		}
+		return cur;
+	}
+
+	template <class ForwardIter, class Size, class T>
+	ForwardIter uninitialized_fill_n(ForwardIter first, Size n, const T& value)
+	{
+		return myTinySTL::unchecked_uninit_fill_n(first, n, value,
+			std::is_trivially_copy_assignable<
+			typename iterator_traits<ForwardIter>::
+			value_type>{});
+	}
+
+	/*****************************************************************************************/
+	// uninitialized_move
+	// 把[first, last)上的内容移动到以 result 为起始处的空间，返回移动结束的位置
+	/*****************************************************************************************/
+	template <class InputIter, class ForwardIter>
+	ForwardIter
+		unchecked_uninit_move(InputIter first, InputIter last, ForwardIter result, std::true_type)
+	{
+		return myTinySTL::move(first, last, result);
+	}
+
+	template <class InputIter, class ForwardIter>
+	ForwardIter
+		unchecked_uninit_move(InputIter first, InputIter last, ForwardIter result, std::false_type)
+	{
+		ForwardIter cur = result;
+		try
+		{
+			for (; first != last; ++first, ++cur)
+			{
+				myTinySTL::construct(&*cur, myTinySTL::move(*first));
+			}
+		}
+		catch (...)
+		{
+			myTinySTL::destroy(result, cur);
+		}
+		return cur;
+	}
+
+	template <class InputIter, class ForwardIter>
+	ForwardIter uninitialized_move(InputIter first, InputIter last, ForwardIter result)
+	{
+		return myTinySTL::unchecked_uninit_move(first, last, result,
+			std::is_trivially_move_assignable<
+			typename iterator_traits<InputIter>::
+			value_type>{});
+	}
+
+	/*****************************************************************************************/
+	// uninitialized_move_n
+	// 把[first, first + n)上的内容移动到以 result 为起始处的空间，返回移动结束的位置
+	/*****************************************************************************************/
+	template <class InputIter, class Size, class ForwardIter>
+	ForwardIter
+		unchecked_uninit_move_n(InputIter first, Size n, ForwardIter result, std::true_type)
+	{
+		return myTinySTL::move(first, first + n, result);
+	}
+
+	template <class InputIter, class Size, class ForwardIter>
+	ForwardIter
+		unchecked_uninit_move_n(InputIter first, Size n, ForwardIter result, std::false_type)
+	{
+		auto cur = result;
+		try
+		{
+			for (; n > 0; --n, ++first, ++cur)
+			{
+				myTinySTL::construct(&*cur, myTinySTL::move(*first));
+			}
+		}
+		catch (...)
+		{
+			for (; result != cur; ++result)
+				myTinySTL::destroy(&*result);
+			throw;
+		}
+		return cur;
+	}
+
+	template <class InputIter, class Size, class ForwardIter>
+	ForwardIter uninitialized_move_n(InputIter first, Size n, ForwardIter result)
+	{
+		return myTinySTL::unchecked_uninit_move_n(first, n, result,
+			std::is_trivially_move_assignable<
+			typename iterator_traits<InputIter>::
+			value_type>{});
+	}
+
+} // namespace myTinySTL
+#endif // !MYTINYSTL_UNINITIALIZED_H_
+

@@ -33,9 +33,6 @@
     <ClInclude Include="functional.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="utility.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="reverseIterator.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -61,6 +58,39 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="unionFindSet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="queue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="algo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="algobase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="astring.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="basic_string.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="memory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="heap_algo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="set_algo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="hashtable.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

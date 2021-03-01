@@ -1,4 +1,3 @@
-#pragma once
 #ifndef MYTINYSTL_EXCEPTDEF_H_
 #define MYTINYSTL_EXCEPTDEF_H_
 
@@ -24,3 +23,4 @@ namespace myTinySTL
 } // namepsace myTinySTL
 
 #endif // !MYTINYSTL_EXCEPTDEF_H_
+

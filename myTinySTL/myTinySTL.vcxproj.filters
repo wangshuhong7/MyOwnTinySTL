@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="alloc.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="construct.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="TypeTraits.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="allocator.h">
@@ -91,6 +85,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="hashtable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="type_traits.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="alloc.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

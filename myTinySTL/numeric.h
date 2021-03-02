@@ -149,7 +149,44 @@ namespace myTinySTL
 		}
 		return ++result;
 	}
+	/*****************************************************************************************/
+	// fill
+	//将[first,last)内所有元素置新值
+	/*****************************************************************************************/
+	/*template<class ForwardIter, class T>
+	void fill(ForwardIter first, ForwardIter last, const T& value) {
+		for (; first != last; first++) {
+			*first = value;
+		}
+	}*/
 
+	/*****************************************************************************************/
+	// count
+	//将[first,last)内所有元素值和指定元素值比较，返回与value相等的元素个数
+	/*****************************************************************************************/
+	template<class InputIter,class T>
+	typename iterator_traits<InputIter>::difference_type
+		count(InputIter first, InputIter last, const T& value) {
+		//以下声明一个计数器
+		typename iterator_traits<InputIter>::difference_type n = 0;
+		for (; first != last; first++) {
+			if (*first == value) {
+				++n;
+			}
+		}
+		return n;
+	}
+	/*****************************************************************************************/
+	// find
+	//将[first,last)内找到第一个匹配“等同”条件者，返回一个InputIter指向该元素，否则返回last
+	/*****************************************************************************************/
+	template<class InputIter, class T>
+	InputIter find(InputIter first, InputIter last, const T& value) {
+		while (first != last && *first != value) {
+			++first;
+		}
+		return first;
+	}
 } // namespace myTinySTL
 #endif // !MYTINYSTL_NUMERIC_H_
 

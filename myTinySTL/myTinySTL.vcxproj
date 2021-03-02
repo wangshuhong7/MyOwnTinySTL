@@ -144,7 +144,7 @@
     <ClInclude Include="reverseIterator.h" />
     <ClInclude Include="set_algo.h" />
     <ClInclude Include="stack.h" />
-    <ClInclude Include="TypeTraits.h" />
+    <ClInclude Include="type_traits.h" />
     <ClInclude Include="uninitialized.h" />
     <ClInclude Include="unionFindSet.h" />
     <ClInclude Include="util.h" />

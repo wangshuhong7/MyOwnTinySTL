@@ -94,10 +94,8 @@ namespace myTinySTL
 
 	template <class T, class U, bool = has_iterator_cat<iterator_traits<T>>::value>
 	struct has_iterator_cat_of
-		: public m_bool_constant<std::is_convertible<
-		typename iterator_traits<T>::iterator_category, U>::value>
-	{
-	};
+		: public m_bool_constant<std::is_convertible<typename iterator_traits<T>::iterator_category, U>::value> {};
+	
 
 	// İÍÈ¡Ä³ÖÖµü´úÆ÷
 	template <class T, class U>

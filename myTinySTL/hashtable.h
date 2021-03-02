@@ -13,7 +13,7 @@
 #include "util.h"
 #include "exceptdef.h"
 
-namespace mystl
+namespace myTinySTL
 {
 
 	// hashtable 的节点定义
@@ -27,7 +27,7 @@ namespace mystl
 		hashtable_node(const T& n) :next(nullptr), value(n) {}
 
 		hashtable_node(const hashtable_node& node) :next(node.next), value(node.value) {}
-		hashtable_node(hashtable_node&& node) :next(node.next), value(mystl::move(node.value))
+		hashtable_node(hashtable_node&& node) :next(node.next), value(myTinySTL::move(node.value))
 		{
 			node.next = nullptr;
 		}
@@ -77,7 +77,7 @@ namespace mystl
 	template <class T>
 	struct ht_value_traits
 	{
-		static constexpr bool is_map = mystl::is_pair<T>::value;
+		static constexpr bool is_map = myTinySTL::is_pair<T>::value;
 
 		typedef ht_value_traits_imp<T, is_map> value_traits_type;
 
@@ -119,12 +119,12 @@ namespace mystl
 	// ht_iterator
 
 	template <class T, class Hash, class KeyEqual>
-	struct ht_iterator_base :public mystl::iterator<mystl::forward_iterator_tag, T>
+	struct ht_iterator_base :public myTinySTL::iterator<myTinySTL::forward_iterator_tag, T>
 	{
-		typedef mystl::hashtable<T, Hash, KeyEqual>         hashtable;
+		typedef myTinySTL::hashtable<T, Hash, KeyEqual>         hashtable;
 		typedef ht_iterator_base<T, Hash, KeyEqual>         base;
-		typedef mystl::ht_iterator<T, Hash, KeyEqual>       iterator;
-		typedef mystl::ht_const_iterator<T, Hash, KeyEqual> const_iterator;
+		typedef myTinySTL::ht_iterator<T, Hash, KeyEqual>       iterator;
+		typedef myTinySTL::ht_const_iterator<T, Hash, KeyEqual> const_iterator;
 		typedef hashtable_node<T>*                          node_ptr;
 		typedef hashtable*                                  contain_ptr;
 		typedef const node_ptr                              const_node_ptr;
@@ -302,7 +302,7 @@ namespace mystl
 
 	// local iterator
 	template <class T>
-	struct ht_local_iterator :public mystl::iterator<mystl::forward_iterator_tag, T>
+	struct ht_local_iterator :public myTinySTL::iterator<myTinySTL::forward_iterator_tag, T>
 	{
 		typedef T                          value_type;
 		typedef value_type*                pointer;
@@ -351,7 +351,7 @@ namespace mystl
 	};
 
 	template <class T>
-	struct ht_const_local_iterator :public mystl::iterator<mystl::forward_iterator_tag, T>
+	struct ht_const_local_iterator :public myTinySTL::iterator<myTinySTL::forward_iterator_tag, T>
 	{
 		typedef T                          value_type;
 		typedef const value_type*          pointer;
@@ -463,7 +463,7 @@ namespace mystl
 	{
 		const size_t* first = ht_prime_list;
 		const size_t* last = ht_prime_list + PRIME_NUM;
-		const size_t* pos = mystl::lower_bound(first, last, n);
+		const size_t* pos = myTinySTL::lower_bound(first, last, n);
 		return pos == last ? *(last - 1) : *pos;
 	}
 
@@ -473,8 +473,8 @@ namespace mystl
 	class hashtable
 	{
 
-		friend struct mystl::ht_iterator<T, Hash, KeyEqual>;
-		friend struct mystl::ht_const_iterator<T, Hash, KeyEqual>;
+		friend struct myTinySTL::ht_iterator<T, Hash, KeyEqual>;
+		friend struct myTinySTL::ht_const_iterator<T, Hash, KeyEqual>;
 
 	public:
 		// hashtable 的型别定义
@@ -487,11 +487,11 @@ namespace mystl
 
 		typedef hashtable_node<T>                           node_type;
 		typedef node_type*                                  node_ptr;
-		typedef mystl::vector<node_ptr>                     bucket_type;
+		typedef myTinySTL::vector<node_ptr>                     bucket_type;
 
-		typedef mystl::allocator<T>                         allocator_type;
-		typedef mystl::allocator<T>                         data_allocator;
-		typedef mystl::allocator<node_type>                 node_allocator;
+		typedef myTinySTL::allocator<T>                         allocator_type;
+		typedef myTinySTL::allocator<T>                         data_allocator;
+		typedef myTinySTL::allocator<node_type>                 node_allocator;
 
 		typedef typename allocator_type::pointer            pointer;
 		typedef typename allocator_type::const_pointer      const_pointer;
@@ -500,10 +500,10 @@ namespace mystl
 		typedef typename allocator_type::size_type          size_type;
 		typedef typename allocator_type::difference_type    difference_type;
 
-		typedef mystl::ht_iterator<T, Hash, KeyEqual>       iterator;
-		typedef mystl::ht_const_iterator<T, Hash, KeyEqual> const_iterator;
-		typedef mystl::ht_local_iterator<T>                 local_iterator;
-		typedef mystl::ht_const_local_iterator<T>           const_local_iterator;
+		typedef myTinySTL::ht_iterator<T, Hash, KeyEqual>       iterator;
+		typedef myTinySTL::ht_const_iterator<T, Hash, KeyEqual> const_iterator;
+		typedef myTinySTL::ht_local_iterator<T>                 local_iterator;
+		typedef myTinySTL::ht_const_local_iterator<T>           const_local_iterator;
 
 		allocator_type get_allocator() const { return allocator_type(); }
 
@@ -563,14 +563,14 @@ namespace mystl
 		}
 
 		template <class Iter, typename std::enable_if<
-			mystl::is_input_iterator<Iter>::value, int>::type = 0>
+			myTinySTL::is_input_iterator<Iter>::value, int>::type = 0>
 			hashtable(Iter first, Iter last,
 				size_type bucket_count,
 				const Hash& hash = Hash(),
 				const KeyEqual& equal = KeyEqual())
-			:size_(mystl::distance(first, last)), mlf_(1.0f), hash_(hash), equal_(equal)
+			:size_(myTinySTL::distance(first, last)), mlf_(1.0f), hash_(hash), equal_(equal)
 		{
-			init(mystl::max(bucket_count, static_cast<size_type>(mystl::distance(first, last))));
+			init(myTinySTL::max(bucket_count, static_cast<size_type>(myTinySTL::distance(first, last))));
 		}
 
 		hashtable(const hashtable& rhs)
@@ -585,7 +585,7 @@ namespace mystl
 			hash_(rhs.hash_),
 			equal_(rhs.equal_)
 		{
-			buckets_ = mystl::move(rhs.buckets_);
+			buckets_ = myTinySTL::move(rhs.buckets_);
 			rhs.bucket_size_ = 0;
 			rhs.size_ = 0;
 			rhs.mlf_ = 0.0f;
@@ -643,13 +643,13 @@ namespace mystl
 		template <class ...Args>
 		iterator emplace_multi_use_hint(const_iterator /*hint*/, Args&& ...args)
 		{
-			return emplace_multi(mystl::forward<Args>(args)...);
+			return emplace_multi(myTinySTL::forward<Args>(args)...);
 		}
 
 		template <class ...Args>
 		iterator emplace_unique_use_hint(const_iterator /*hint*/, Args&& ...args)
 		{
-			return emplace_unique(mystl::forward<Args>(args)...).first;
+			return emplace_unique(myTinySTL::forward<Args>(args)...).first;
 		}
 
 		// insert
@@ -664,7 +664,7 @@ namespace mystl
 		}
 		iterator insert_multi(value_type&& value)
 		{
-			return emplace_multi(mystl::move(value));
+			return emplace_multi(myTinySTL::move(value));
 		}
 
 
@@ -675,7 +675,7 @@ namespace mystl
 		}
 		pair<iterator, bool> insert_unique(value_type&& value)
 		{
-			return emplace_unique(mystl::move(value));
+			return emplace_unique(myTinySTL::move(value));
 		}
 
 		// [note]: 同 emplace_hint
@@ -685,7 +685,7 @@ namespace mystl
 		}
 		iterator insert_multi_use_hint(const_iterator /*hint*/, value_type&& value)
 		{
-			return emplace_multi(mystl::move(value));
+			return emplace_multi(myTinySTL::move(value));
 		}
 
 		iterator insert_unique_use_hint(const_iterator /*hint*/, const value_type& value)
@@ -694,7 +694,7 @@ namespace mystl
 		}
 		iterator insert_unique_use_hint(const_iterator /*hint*/, value_type&& value)
 		{
-			return emplace_unique(mystl::move(value));
+			return emplace_unique(myTinySTL::move(value));
 		}
 
 		template <class InputIter>
@@ -830,13 +830,13 @@ namespace mystl
 
 		// insert
 		template <class InputIter>
-		void copy_insert_multi(InputIter first, InputIter last, mystl::input_iterator_tag);
+		void copy_insert_multi(InputIter first, InputIter last, myTinySTL::input_iterator_tag);
 		template <class ForwardIter>
-		void copy_insert_multi(ForwardIter first, ForwardIter last, mystl::forward_iterator_tag);
+		void copy_insert_multi(ForwardIter first, ForwardIter last, myTinySTL::forward_iterator_tag);
 		template <class InputIter>
-		void copy_insert_unique(InputIter first, InputIter last, mystl::input_iterator_tag);
+		void copy_insert_unique(InputIter first, InputIter last, myTinySTL::input_iterator_tag);
 		template <class ForwardIter>
-		void copy_insert_unique(ForwardIter first, ForwardIter last, mystl::forward_iterator_tag);
+		void copy_insert_unique(ForwardIter first, ForwardIter last, myTinySTL::forward_iterator_tag);
 
 		// insert node
 		pair<iterator, bool> insert_node_unique(node_ptr np);
@@ -874,7 +874,7 @@ namespace mystl
 		hashtable<T, Hash, KeyEqual>::
 		operator=(hashtable&& rhs) noexcept
 	{
-		hashtable tmp(mystl::move(rhs));
+		hashtable tmp(myTinySTL::move(rhs));
 		swap(tmp);
 		return *this;
 	}
@@ -887,7 +887,7 @@ namespace mystl
 		hashtable<T, Hash, KeyEqual>::
 		emplace_multi(Args&& ...args)
 	{
-		auto np = create_node(mystl::forward<Args>(args)...);
+		auto np = create_node(myTinySTL::forward<Args>(args)...);
 		try
 		{
 			if ((float)(size_ + 1) > (float)bucket_size_ * max_load_factor())
@@ -909,7 +909,7 @@ namespace mystl
 		hashtable<T, Hash, KeyEqual>::
 		emplace_unique(Args&& ...args)
 	{
-		auto np = create_node(mystl::forward<Args>(args)...);
+		auto np = create_node(myTinySTL::forward<Args>(args)...);
 		try
 		{
 			if ((float)(size_ + 1) > (float)bucket_size_ * max_load_factor())
@@ -934,14 +934,14 @@ namespace mystl
 		for (auto cur = first; cur; cur = cur->next)
 		{
 			if (is_equal(value_traits::get_key(cur->value), value_traits::get_key(value)))
-				return mystl::make_pair(iterator(cur, this), false);
+				return myTinySTL::make_pair(iterator(cur, this), false);
 		}
 		// 让新节点成为链表的第一个节点
 		auto tmp = create_node(value);
 		tmp->next = first;
 		buckets_[n] = tmp;
 		++size_;
-		return mystl::make_pair(iterator(tmp, this), true);
+		return myTinySTL::make_pair(iterator(tmp, this), true);
 	}
 
 	// 在不需要重建表格的情况下插入新节点，键值允许重复
@@ -1050,7 +1050,7 @@ namespace mystl
 		if (p.first.node != nullptr)
 		{
 			erase(p.first, p.second);
-			return mystl::distance(p.first, p.second);
+			return myTinySTL::distance(p.first, p.second);
 		}
 		return 0;
 	}
@@ -1201,17 +1201,17 @@ namespace mystl
 				for (node_ptr second = first->next; second; second = second->next)
 				{
 					if (!is_equal(value_traits::get_key(second->value), key))
-						return mystl::make_pair(iterator(first, this), iterator(second, this));
+						return myTinySTL::make_pair(iterator(first, this), iterator(second, this));
 				}
 				for (auto m = n + 1; m < bucket_size_; ++m)
 				{ // 整个链表都相等，查找下一个链表出现的位置
 					if (buckets_[m])
-						return mystl::make_pair(iterator(first, this), iterator(buckets_[m], this));
+						return myTinySTL::make_pair(iterator(first, this), iterator(buckets_[m], this));
 				}
-				return mystl::make_pair(iterator(first, this), end());
+				return myTinySTL::make_pair(iterator(first, this), end());
 			}
 		}
-		return mystl::make_pair(end(), end());
+		return myTinySTL::make_pair(end(), end());
 	}
 
 	template <class T, class Hash, class KeyEqual>
@@ -1228,17 +1228,17 @@ namespace mystl
 				for (node_ptr second = first->next; second; second = second->next)
 				{
 					if (!is_equal(value_traits::get_key(second->value), key))
-						return mystl::make_pair(M_cit(first), M_cit(second));
+						return myTinySTL::make_pair(M_cit(first), M_cit(second));
 				}
 				for (auto m = n + 1; m < bucket_size_; ++m)
 				{ // 整个链表都相等，查找下一个链表出现的位置
 					if (buckets_[m])
-						return mystl::make_pair(M_cit(first), M_cit(buckets_[m]));
+						return myTinySTL::make_pair(M_cit(first), M_cit(buckets_[m]));
 				}
-				return mystl::make_pair(M_cit(first), cend());
+				return myTinySTL::make_pair(M_cit(first), cend());
 			}
 		}
-		return mystl::make_pair(cend(), cend());
+		return myTinySTL::make_pair(cend(), cend());
 	}
 
 	template <class T, class Hash, class KeyEqual>
@@ -1253,16 +1253,16 @@ namespace mystl
 			if (is_equal(value_traits::get_key(first->value), key))
 			{
 				if (first->next)
-					return mystl::make_pair(iterator(first, this), iterator(first->next, this));
+					return myTinySTL::make_pair(iterator(first, this), iterator(first->next, this));
 				for (auto m = n + 1; m < bucket_size_; ++m)
 				{ // 整个链表都相等，查找下一个链表出现的位置
 					if (buckets_[m])
-						return mystl::make_pair(iterator(first, this), iterator(buckets_[m], this));
+						return myTinySTL::make_pair(iterator(first, this), iterator(buckets_[m], this));
 				}
-				return mystl::make_pair(iterator(first, this), end());
+				return myTinySTL::make_pair(iterator(first, this), end());
 			}
 		}
-		return mystl::make_pair(end(), end());
+		return myTinySTL::make_pair(end(), end());
 	}
 
 	template <class T, class Hash, class KeyEqual>
@@ -1277,16 +1277,16 @@ namespace mystl
 			if (is_equal(value_traits::get_key(first->value), key))
 			{
 				if (first->next)
-					return mystl::make_pair(M_cit(first), M_cit(first->next));
+					return myTinySTL::make_pair(M_cit(first), M_cit(first->next));
 				for (auto m = n + 1; m < bucket_size_; ++m)
 				{ // 整个链表都相等，查找下一个链表出现的位置
 					if (buckets_[m])
-						return mystl::make_pair(M_cit(first), M_cit(buckets_[m]));
+						return myTinySTL::make_pair(M_cit(first), M_cit(buckets_[m]));
 				}
-				return mystl::make_pair(M_cit(first), cend());
+				return myTinySTL::make_pair(M_cit(first), cend());
 			}
 		}
-		return mystl::make_pair(cend(), cend());
+		return myTinySTL::make_pair(cend(), cend());
 	}
 
 	// 交换 hashtable
@@ -1297,11 +1297,11 @@ namespace mystl
 		if (this != &rhs)
 		{
 			buckets_.swap(rhs.buckets_);
-			mystl::swap(bucket_size_, rhs.bucket_size_);
-			mystl::swap(size_, rhs.size_);
-			mystl::swap(mlf_, rhs.mlf_);
-			mystl::swap(hash_, rhs.hash_);
-			mystl::swap(equal_, rhs.equal_);
+			myTinySTL::swap(bucket_size_, rhs.bucket_size_);
+			myTinySTL::swap(size_, rhs.size_);
+			myTinySTL::swap(mlf_, rhs.mlf_);
+			myTinySTL::swap(hash_, rhs.hash_);
+			myTinySTL::swap(equal_, rhs.equal_);
 		}
 	}
 
@@ -1373,7 +1373,7 @@ namespace mystl
 		node_ptr tmp = node_allocator::allocate(1);
 		try
 		{
-			data_allocator::construct(mystl::address_of(tmp->value), mystl::forward<Args>(args)...);
+			data_allocator::construct(myTinySTL::address_of(tmp->value), myTinySTL::forward<Args>(args)...);
 			tmp->next = nullptr;
 		}
 		catch (...)
@@ -1389,7 +1389,7 @@ namespace mystl
 	void hashtable<T, Hash, KeyEqual>::
 		destroy_node(node_ptr node)
 	{
-		data_allocator::destroy(mystl::address_of(node->value));
+		data_allocator::destroy(myTinySTL::address_of(node->value));
 		node_allocator::deallocate(node);
 		node = nullptr;
 	}
@@ -1432,9 +1432,9 @@ namespace mystl
 	template <class T, class Hash, class KeyEqual>
 	template <class InputIter>
 	void hashtable<T, Hash, KeyEqual>::
-		copy_insert_multi(InputIter first, InputIter last, mystl::input_iterator_tag)
+		copy_insert_multi(InputIter first, InputIter last, myTinySTL::input_iterator_tag)
 	{
-		rehash_if_need(mystl::distance(first, last));
+		rehash_if_need(myTinySTL::distance(first, last));
 		for (; first != last; ++first)
 			insert_multi_noresize(*first);
 	}
@@ -1442,9 +1442,9 @@ namespace mystl
 	template <class T, class Hash, class KeyEqual>
 	template <class ForwardIter>
 	void hashtable<T, Hash, KeyEqual>::
-		copy_insert_multi(ForwardIter first, ForwardIter last, mystl::forward_iterator_tag)
+		copy_insert_multi(ForwardIter first, ForwardIter last, myTinySTL::forward_iterator_tag)
 	{
-		size_type n = mystl::distance(first, last);
+		size_type n = myTinySTL::distance(first, last);
 		rehash_if_need(n);
 		for (; n > 0; --n, ++first)
 			insert_multi_noresize(*first);
@@ -1453,9 +1453,9 @@ namespace mystl
 	template <class T, class Hash, class KeyEqual>
 	template <class InputIter>
 	void hashtable<T, Hash, KeyEqual>::
-		copy_insert_unique(InputIter first, InputIter last, mystl::input_iterator_tag)
+		copy_insert_unique(InputIter first, InputIter last, myTinySTL::input_iterator_tag)
 	{
-		rehash_if_need(mystl::distance(first, last));
+		rehash_if_need(myTinySTL::distance(first, last));
 		for (; first != last; ++first)
 			insert_unique_noresize(*first);
 	}
@@ -1463,9 +1463,9 @@ namespace mystl
 	template <class T, class Hash, class KeyEqual>
 	template <class ForwardIter>
 	void hashtable<T, Hash, KeyEqual>::
-		copy_insert_unique(ForwardIter first, ForwardIter last, mystl::forward_iterator_tag)
+		copy_insert_unique(ForwardIter first, ForwardIter last, myTinySTL::forward_iterator_tag)
 	{
-		size_type n = mystl::distance(first, last);
+		size_type n = myTinySTL::distance(first, last);
 		rehash_if_need(n);
 		for (; n > 0; --n, ++first)
 			insert_unique_noresize(*first);
@@ -1513,19 +1513,19 @@ namespace mystl
 		{
 			buckets_[n] = np;
 			++size_;
-			return mystl::make_pair(iterator(np, this), true);
+			return myTinySTL::make_pair(iterator(np, this), true);
 		}
 		for (; cur; cur = cur->next)
 		{
 			if (is_equal(value_traits::get_key(cur->value), value_traits::get_key(np->value)))
 			{
-				return mystl::make_pair(iterator(cur, this), false);
+				return myTinySTL::make_pair(iterator(cur, this), false);
 			}
 		}
 		np->next = buckets_[n];
 		buckets_[n] = np;
 		++size_;
-		return mystl::make_pair(iterator(np, this), true);
+		return myTinySTL::make_pair(iterator(np, this), true);
 	}
 
 	// replace_bucket 函数
@@ -1618,8 +1618,8 @@ namespace mystl
 		{
 			auto p1 = equal_range_multi(value_traits::get_key(*f));
 			auto p2 = other.equal_range_multi(value_traits::get_key(*f));
-			if (mystl::distance(p1.first, p1.last) != mystl::distance(p2.first, p2.last) ||
-				!mystl::is_permutation(p1.first, p2.last, p2.first, p2.last))
+			if (myTinySTL::distance(p1.first, p1.last) != myTinySTL::distance(p2.first, p2.last) ||
+				!myTinySTL::is_permutation(p1.first, p2.last, p2.first, p2.last))
 				return false;
 			f = p1.last;
 		}
@@ -1640,7 +1640,7 @@ namespace mystl
 		return true;
 	}
 
-	// 重载 mystl 的 swap
+	// 重载 myTinySTL 的 swap
 	template <class T, class Hash, class KeyEqual>
 	void swap(hashtable<T, Hash, KeyEqual>& lhs,
 		hashtable<T, Hash, KeyEqual>& rhs) noexcept
@@ -1648,7 +1648,7 @@ namespace mystl
 		lhs.swap(rhs);
 	}
 
-} // namespace mystl
+} // namespace myTinySTL
 #endif // !MYTINYSTL_HASHTABLE_H_
 
 

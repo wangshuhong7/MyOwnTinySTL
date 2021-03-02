@@ -208,5 +208,35 @@ namespace myTinySTL {
 		typedef _true_type has_trivial_destructor;
 		typedef _true_type is_POD_type;
 	};
+	// helper struct
+
+	template <class T, T v>
+	struct m_integral_constant
+	{
+		static constexpr T value = v;
+	};
+
+	template <bool b>
+	using m_bool_constant = m_integral_constant<bool, b>;
+
+	typedef m_bool_constant<true>  m_true_type;
+	typedef m_bool_constant<false> m_false_type;
+
+	/*****************************************************************************************/
+	// type traits
+
+	// is_pair
+
+	// --- forward declaration begin
+	template <class T1, class T2>
+	struct pair;
+	// --- forward declaration end
+
+	template <class T>
+	struct is_pair : myTinySTL::m_false_type {};
+
+	template <class T1, class T2>
+	struct is_pair<myTinySTL::pair<T1, T2>> : myTinySTL::m_true_type {};
+
 }
 #endif // !_TYPE_TRAITS_H_

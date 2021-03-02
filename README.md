@@ -1,4 +1,6 @@
 # MyOwnTinySTL
+图文请看“STL源码剖析总结”word文档
+
 learn to write a TinySTL
 1.六大组件说明
 六大组件完成交互。容器（containers）通过空间配置器（allocator）取得数据存储空间，算法（algorithm）通过迭代器（iterator）存取容器（containers）内容。仿函数（functor）可以协助算法（algorithm）完成不同策略的变化，适配器（adapter）可以修饰或套接仿函数（functor）。
